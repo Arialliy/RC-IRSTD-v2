@@ -1,0 +1,66 @@
+{
+  "architecture": {
+    "default_fusion_channels": 16,
+    "initialization": "zero-residual exact MSHNet",
+    "modules": [
+      "SN-LCP",
+      "CS-CCF",
+      "RP-RGF"
+    ],
+    "version": "rc-mshnet-v1"
+  },
+  "created_date": "2026-07-15",
+  "distribution_type": "overlay_installer_patch",
+  "entry_points": {
+    "install": "tools/apply_patch.py",
+    "smoke_after_install": "scripts/smoke_rc_mshnet.py",
+    "three_gpu_ablation": "scripts/run_rc_mshnet_ablation_3gpu.sh",
+    "verify_checkout": "tools/verify_patch.py",
+    "verify_package": "tools/verify_integrity.py"
+  },
+  "in_place_patch_targets": [
+    "rc_irstd/models/mshnet.py",
+    "rc_irstd/models/__init__.py",
+    "rc_irstd/training/detector_trainer.py",
+    "rc_irstd/losses/detector.py",
+    "risk_curve/build_logit_threshold_grid.py"
+  ],
+  "method_identity": {
+    "loss_ablation": "RC-MSHNet + raw-logit TailRank",
+    "proposed_detector": "RC-MSHNet + SLS",
+    "proposed_full_system": "RC-MSHNet + dual monotone RiskCurve",
+    "strict_baseline": "MSHNet + SLS"
+  },
+  "overlay_files": [
+    "configs/detector_mshnet_outer_irstd_sls.yaml",
+    "configs/detector_mshnet_outer_nuaa_sls.yaml",
+    "configs/detector_mshnet_outer_nudt_sls.yaml",
+    "configs/detector_mshnet_sls_aaai.yaml",
+    "configs/detector_rc_mshnet_fast_aaai.yaml",
+    "configs/detector_rc_mshnet_from_scratch_aaai.yaml",
+    "configs/detector_rc_mshnet_outer_irstd_fast.yaml",
+    "configs/detector_rc_mshnet_outer_nuaa_fast.yaml",
+    "configs/detector_rc_mshnet_outer_nudt_fast.yaml",
+    "configs/detector_rc_mshnet_tailrank_ablation.yaml",
+    "configs/rc_mshnet_aaai27_method_contract.yaml",
+    "configs/smoke_rc_mshnet.yaml",
+    "rc_irstd/models/rc_mshnet.py",
+    "scripts/build_rc_mshnet_logit_grid.sh",
+    "scripts/export_rc_mshnet_raw_logits.sh",
+    "scripts/extract_mshnet_weights.py",
+    "scripts/launch_rc_mshnet_smoke.sh",
+    "scripts/run_rc_mshnet_ablation_3gpu.sh",
+    "scripts/smoke_rc_mshnet.py",
+    "tests/test_rc_mshnet.py"
+  ],
+  "package_id": "rc-mshnet-aaai-sprint-v1",
+  "target_branch_audited": "main",
+  "target_repository": "Arialliy/RC-IRSTD-v2",
+  "validation_evidence": [
+    "validation/architecture_smoke.json",
+    "validation/model_pytest.txt",
+    "validation/installer_validation.txt",
+    "validation/converter_validation.txt",
+    "VALIDATION_REPORT.json"
+  ]
+}

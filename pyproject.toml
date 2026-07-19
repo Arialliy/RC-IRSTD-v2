@@ -1,0 +1,67 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rc-irstd"
+version = "0.1.0"
+description = "Risk-aware infrared small target detection with strict causal evaluation"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+  "torch",
+  "torchvision",
+  "numpy",
+  "scipy",
+  "Pillow",
+  "scikit-image",
+  "PyYAML",
+  "pandas",
+  "tqdm",
+]
+
+[project.optional-dependencies]
+dev = ["pytest"]
+
+[project.scripts]
+rc-irstd-train = "rc_irstd.cli.train_detector:main"
+rc-irstd-export = "rc_irstd.cli.export_scores:main"
+rc-irstd-build-episodes = "rc_irstd.cli.build_episodes:main"
+rc-irstd-train-calibrator = "rc_irstd.cli.train_calibrator:main"
+rc-irstd-evaluate = "rc_irstd.cli.evaluate_causal:main"
+rc-irstd-infer = "rc_irstd.cli.infer_online:main"
+rc-irstd-pipeline = "rc_irstd.cli.run_pipeline:main"
+rc-irstd-convert-upstream = "rc_irstd.cli.convert_upstream_checkpoint:main"
+rc-irstd-make-synthetic = "rc_irstd.cli.make_synthetic:main"
+
+[tool.setuptools.packages.find]
+include = [
+  "rc_irstd*",
+  "certification*",
+  "data_ext*",
+  "evaluation*",
+  "losses*",
+  "model*",
+  "risk_curve*",
+  "scripts*",
+  "utils*",
+]
+namespaces = true
+
+[tool.setuptools]
+py-modules = [
+  "main",
+  "build_episodes",
+  "convert_upstream_checkpoint",
+  "evaluate_causal",
+  "export_scores",
+  "infer_online",
+  "make_synthetic",
+  "run_pipeline",
+  "train_calibrator",
+  "train_detector",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]

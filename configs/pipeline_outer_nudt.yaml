@@ -1,0 +1,60 @@
+seed: 42
+device: cuda:1
+devices: [cuda:1]
+parallel_lodo: false
+diagnostic_only: false
+output_dir: ../outputs/outer_lodo/NUDT-SIRST
+detector_template: detector.yaml
+calibrator_template: calibrator_outer_lodo.yaml
+
+method:
+  name: risk_curve
+baseline:
+  direct_threshold:
+    enabled: true
+
+meta_sources:
+  - name: NUAA-SIRST
+    path: ../datasets/NUAA-SIRST
+  - name: IRSTD-1K
+    path: ../datasets/IRSTD-1K
+
+final_targets:
+  - name: NUDT-SIRST
+    path: ../datasets/NUDT-SIRST
+    split: test
+    evaluate: true
+    risk_curve_mode: static-cross-fit
+    cross_fit_folds: 5
+    num_workers: 2
+
+meta:
+  split: train
+  budgets: [0.0001, 0.00001, 0.000001]
+  adaptation_window: 32
+  evaluation_window: 1
+  stride: 33
+  mode: causal
+  risk_bins: 256
+  num_workers: 2
+
+risk_curve:
+  quantile: 0.90
+  lambda_component: 1.0
+  hidden_dim: 256
+  dropout: 0.10
+  epochs: 200
+  batch_size: 32
+  lr: 0.001
+  weight_decay: 0.0001
+  patience: 30
+  num_workers: 0
+  validation_domain: IRSTD-1K
+  budget_pairs:
+    - {name: loose, pixel: 0.00001, component: 5.0}
+    - {name: strict, pixel: 0.000001, component: 1.0}
+
+crc:
+  enabled: true
+  alpha: 0.10
+  calibration_sizes: [10, 20, 50]

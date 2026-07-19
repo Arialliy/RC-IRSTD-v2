@@ -1,0 +1,49 @@
+# End-to-end diagnostic smoke run. It exercises the strict LODO/data/artifact
+# path with an explicitly non-paper compact detector backend.
+seed: 7
+device: cpu
+devices: [cpu]
+parallel_lodo: false
+diagnostic_only: true
+output_dir: ../artifacts/smoke_pipeline
+
+# Explicit legacy diagnostic route. Formal/default configurations use
+# method.name=risk_curve.
+method:
+  name: direct_threshold
+
+detector_template: smoke_detector.yaml
+calibrator_template: smoke_calibrator.yaml
+
+meta_sources:
+  - name: domain_a
+    path: ../artifacts/smoke_data/domain_a
+  - name: domain_b
+    path: ../artifacts/smoke_data/domain_b
+  - name: domain_c
+    path: ../artifacts/smoke_data/domain_c
+
+final_targets:
+  - name: domain_d
+    path: ../artifacts/smoke_data/domain_d
+    split: test
+    evaluate: true
+    support_size: 1
+    query_size: 2
+    budgets: [0.01, 0.005, 0.001]
+    num_workers: 0
+    image_size: 32
+    resize_eval: true
+
+meta:
+  split: test
+  budgets: [0.01, 0.005, 0.001]
+  support_size: 1
+  query_size: 2
+  stride: 3
+  max_episodes_per_domain: 1
+  mode: causal
+  risk_bins: 64
+  num_workers: 0
+  image_size: 32
+  resize_eval: true

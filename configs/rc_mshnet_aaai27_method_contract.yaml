@@ -1,0 +1,56 @@
+# Frozen method identity for the AAAI sprint.
+# This file is documentation/execution metadata; detector training uses one of
+# detector_rc_mshnet_outer_*_fast.yaml and the repository RiskCurve CLIs.
+schema_version: 1
+method_name: RC-IRSTD
+baseline_detector: MSHNet
+proposed_detector: RC-MSHNet
+proposed_system: RC-MSHNet + dual monotone RiskCurve
+
+rc_mshnet:
+  architecture_version: rc-mshnet-v1
+  inherited_backbone: canonical MSHNet
+  exact_initialization: zero_residual_exact_mshnet
+  modules:
+    - name: SN-LCP
+      full_name: scale-normalized local-contrast pyramid
+      purpose: suppress domain-dependent gain/noise and retain small hot-target contrast
+    - name: CS-CCF
+      full_name: cross-scale soft component-context fusion
+      purpose: distinguish compact targets from fragmented clutter across decoder scales
+    - name: RP-RGF
+      full_name: risk-proxy residual gated fusion
+      purpose: select contrast, component, or no-op correction spatially
+  main_loss: StableSLS-v1 only
+  main_loss_identity: rc_irstd.losses.sls.StableSLSLoss
+  upstream_sls_port: separate literature baseline, not used by Phase-2 detector gate
+  optional_loss_ablation: raw-logit TailRank Candidate A
+
+risk_curve:
+  role: deployment operating-point selector
+  representation: raw_logit_float32
+  finite_grid_points: 1024
+  reject_action: external_plus_inf
+  predicted_risks:
+    - pixel_false_alarm_risk
+    - conservative_monotone_component_false_alarm_risk
+  main_claim_scope: empirical zero-label transductive selection
+  forbidden_claims:
+    - per-image causal adaptation on static datasets
+    - zero-label formal risk certificate
+
+primary_comparisons:
+  detector:
+    - MSHNet + StableSLS-v1
+    - MSHNet-FT + StableSLS-v1
+    - RC-MSHNet + StableSLS-v1
+  deployment:
+    - source-fixed threshold
+    - RC-Direct
+    - RiskCurve
+  ablations:
+    - no SN-LCP
+    - no CS-CCF
+    - no RP-RGF
+    - no branch auxiliary supervision
+    - TailRank loss

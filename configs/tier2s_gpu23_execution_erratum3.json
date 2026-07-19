@@ -1,0 +1,49 @@
+{
+  "schema_version": "rc-irstd-aaai27-tier2s-gpu23-execution-erratum3",
+  "erratum_id": "tier2s_gpu23_execution_erratum3",
+  "research_mode": "exploratory_source_only",
+  "parent_execution_erratum2": {
+    "registration_path": "artifacts/aaai27/audit/governance/tier2s_gpu23_execution_erratum2/TIER2S_GPU23_EXECUTION_ERRATUM2.json",
+    "registration_sha256": "6eb4dbcb1f7ddea180ec45b3e4d7e76ffad0cdedd44f62b165a5068de6498407",
+    "registration_sidecar_sha256": "9d41ead0f93d229a85be11bd7607a4accbdc3ba2c287d62fef3253befb2afe70",
+    "config_path": "configs/tier2s_gpu23_execution_erratum2.json",
+    "config_sha256": "51379e15e22d398f59d7a2f482e921d039cc439ac940e5fdc562ab56469a74b0",
+    "launcher_path": "scripts/launch_tier2s_factorized_isolated_v2_gpu23_execution_erratum2.py",
+    "launcher_sha256": "3825f3922fc5008001d82d087bce2177cf99d925e6eb9d1cae7739e44d64f553"
+  },
+  "observed_post_registration_mismatch": {
+    "problem": "direct_file_execution_imports_scripts_before_adding_the_exact_project_root_to_sys_path",
+    "observed_safe_state": "the_frozen_erratum2_launcher_succeeds_when_imported_as_a_package_module_and_all_runtime_contracts_are_verified",
+    "invalid_parent_entrypoint": "python_absolute_script_path_execute",
+    "corrected_entrypoint": "append_only_wrapper_injects_exact_project_root_then_imports_and_delegates_to_frozen_erratum2",
+    "new_wrapper_must_be_bound_in_launch_intent_code_sha256": true,
+    "import_failure_or_root_drift": "FAIL_CLOSED_NO_LAUNCH"
+  },
+  "unchanged_execution_contract": {
+    "formal_container_name_reused_from_unexecuted_erratum2": true,
+    "formal_intent_path_reused_from_unexecuted_erratum2": true,
+    "physical_gpus": [2, 3],
+    "container_logical_ordinals": {"2": 0, "3": 1},
+    "docker_device_ids": ["2", "3"],
+    "container_nvidia_indices": [0, 1],
+    "torch_ordinals": [0, 1],
+    "gpu_fallback_allowed": false,
+    "jobs_per_lane": 9,
+    "total_jobs": 18,
+    "source_only": true,
+    "result_use": "failure_attribution_only",
+    "formal_v3_model_training_authorized": false,
+    "source_gate_a_authorized": false,
+    "riskcurve_authorized": false,
+    "paper_claim_authorized": false,
+    "outer_target_access_authorized": false
+  },
+  "append_only_policy": {
+    "parent_execution_erratum2_mutated": false,
+    "parent_execution_erratum2_registration_mutated": false,
+    "parent_execution_erratum2_formal_intent_must_be_absent": true,
+    "historical_tier2r_hold_mutated": false,
+    "replacement_scope": "direct_file_entrypoint_project_root_bootstrap_only"
+  }
+}
+

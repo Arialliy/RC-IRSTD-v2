@@ -1,0 +1,53 @@
+seed: 7
+deterministic: true
+diagnostic_only: true
+device: cpu
+output_dir: ../artifacts/smoke_detector
+
+data:
+  sources:
+    - name: domain_a
+      path: ../artifacts/smoke_data/domain_a
+    - name: domain_b
+      path: ../artifacts/smoke_data/domain_b
+  train_split: train
+  val_split: null
+  diagnostic_test_eval: false
+  image_size: 32
+  batch_per_domain: 1
+  num_workers: 0
+  augment: false
+
+model:
+  # Explicit diagnostic-only compact backend for fast CPU smoke testing.
+  backend: complete_compat
+  input_channels: 3
+  channels: [2, 4, 8, 16, 32]
+  block_counts: [1, 1, 1, 1]
+
+loss:
+  lambda_tail: 0.05
+  lambda_miss: 0.05
+  lambda_margin: 0.05
+  auxiliary_weight: 0.10
+  background_fraction: 0.05
+  miss_fraction: 0.5
+  object_top_fraction: 0.5
+  gamma: 5.0
+  margin: 0.1
+  min_peak_score: 0.05
+  exclusion_radius: 1
+
+optimizer:
+  name: adamw
+  lr: 0.001
+  weight_decay: 0.0001
+
+training:
+  checkpoint_selection: fixed_last
+  epochs: 1
+  warmup_epochs: 0
+  min_lr: 0.00001
+  grad_clip: 5.0
+  amp: false
+  validation_interval: 1

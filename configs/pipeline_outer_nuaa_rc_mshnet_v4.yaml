@@ -1,0 +1,84 @@
+# Gate F formal raw-logit v4 fold: outer target NUAA-SIRST.
+seed: 42
+device: cuda:0
+devices: [cuda:0]
+parallel_lodo: false
+diagnostic_only: false
+output_dir: ../outputs/aaai27/risk_curve/outer_nuaa_seed42
+
+method_contract: rc_v2_aaai27_main.yaml
+require_method_contract: true
+detector_template: detector_rc_mshnet_outer_nuaa_fast.yaml
+calibrator_template: calibrator_outer_lodo.yaml
+
+# These are deliberate placeholders until the matching source-only MSHNet
+# tensor checkpoints have been generated.  Each filename names its train set.
+detector_initializers:
+  outer_final: ../artifacts/aaai27/initializers/mshnet_seed42_train_nudt_irstd_tensor_only.pt
+  inner_by_held_out:
+    NUDT-SIRST: ../artifacts/aaai27/initializers/mshnet_seed42_train_irstd_tensor_only.pt
+    IRSTD-1K: ../artifacts/aaai27/initializers/mshnet_seed42_train_nudt_tensor_only.pt
+
+method:
+  name: risk_curve
+baseline:
+  direct_threshold:
+    enabled: true
+
+meta_sources:
+  - name: NUDT-SIRST
+    path: ../datasets/NUDT-SIRST
+  - name: IRSTD-1K
+    path: ../datasets/IRSTD-1K
+
+final_targets:
+  - name: NUAA-SIRST
+    path: ../datasets/NUAA-SIRST
+    split: test
+    evaluate: true
+    risk_curve_mode: static-cross-fit
+    cross_fit_folds: 5
+    cross_fit_seed: 42
+    num_workers: 2
+
+meta:
+  split: train
+  budgets: [0.0001, 0.00001, 0.000001]
+  adaptation_window: 32
+  evaluation_window: 1
+  stride: 33
+  mode: causal
+  risk_bins: 256
+  num_workers: 2
+
+risk_curve:
+  representation: raw_logit_float32
+  outer_target: NUAA-SIRST
+  max_grid_points: 1024
+  quantile: 0.90
+  lambda_component: 1.0
+  hidden_dim: 256
+  dropout: 0.10
+  epochs: 200
+  batch_size: 32
+  lr: 0.001
+  weight_decay: 0.0001
+  patience: 30
+  num_workers: 0
+  validation_domain: IRSTD-1K
+  budget_pairs:
+    - {name: strict, pixel: 0.000001, component: 1.0}
+    - {name: medium, pixel: 0.000005, component: 5.0}
+    - {name: loose, pixel: 0.00001, component: 10.0}
+
+target_stage_separation:
+  selection_scores: scores_unlabeled
+  selection_labels_loaded: false
+  selection_freeze_required: true
+  labeled_audit_scores: scores_labeled_audit
+  labeled_audit_after_freeze: true
+
+crc:
+  enabled: true
+  alpha: 0.10
+  calibration_sizes: [10, 20, 50]

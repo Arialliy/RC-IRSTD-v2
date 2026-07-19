@@ -1,0 +1,36 @@
+seed: 42
+deterministic: true
+device: auto
+episodes_dir: ../outputs/meta_episodes
+output_dir: ../outputs/calibrator
+
+validation:
+  # Reserve complete pseudo-target domains. When empty, the last domain in
+  # episode metadata is held out deterministically.
+  strategy: domain
+  domains: []
+  fraction: 0.20  # used only when strategy=random (diagnostic use)
+
+model:
+  hidden_dims: [256, 128]
+  dropout: 0.10
+  min_logit: -10.0
+  max_logit: 18.0
+
+loss:
+  lambda_oracle: 1.0
+  lambda_violation: 1.0
+  lambda_utility: 0.05
+  lambda_smoothness: 0.01
+  under_weight: 4.0
+  soft_temperature: 0.20
+
+training:
+  epochs: 200
+  batch_size: 64
+  num_workers: 0
+  lr: 0.001
+  min_lr: 0.000001
+  weight_decay: 0.0001
+  grad_clip: 5.0
+  early_stopping_patience: 30

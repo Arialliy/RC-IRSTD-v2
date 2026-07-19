@@ -1,0 +1,77 @@
+# Tier2R contrast baseline C.  It is matched to CV except for the single
+# preregistered use_component_context switch.
+seed: 43
+deterministic: true
+device: cuda:0
+output_dir: ../outputs/aaai27/detectors/component_rescue/tier2r_c_v1/UNBOUND
+
+experiment_identity:
+  schema_version: rc-irstd-aaai27-tier2r-component-rescue-v1
+  stage: tier2r_c_source_only_confirmation
+  run_role: rc_mshnet_c
+  architecture_id: rc_mshnet_v2_component_role_split
+  outer_target: SOURCE_LODO_ONLY
+  target_labels_used_for_training: false
+
+data:
+  sources:
+    - {name: IRSTD-1K, path: ../datasets/IRSTD-1K}
+  train_split: train
+  val_split: null
+  diagnostic_test_eval: false
+  image_size: 256
+  batch_per_domain: 2
+  num_workers: 4
+  augment: true
+
+model:
+  backend: rc_mshnet
+  architecture_version: rc-mshnet-v2-component-role-split
+  input_channels: 3
+  channels: [16, 32, 64, 128, 256]
+  block_counts: [2, 2, 2, 2]
+  fusion_channels: 16
+  contrast_windows: [3, 7, 15]
+  context_dilations: [1, 2, 4]
+  component_support_window: 3
+  component_ring_window: 9
+  use_contrast: true
+  use_component_context: false
+  use_component_expert: false
+  use_risk_gate: true
+  expose_branch_auxiliary: false
+
+loss:
+  lambda_tail: 0.0
+  lambda_miss: 0.0
+  lambda_margin: 0.0
+  auxiliary_weight: 0.25
+  background_fraction: 0.01
+  miss_fraction: 0.20
+  object_top_fraction: 0.25
+  gamma: 10.0
+  margin: 0.15
+  min_peak_score: 0.05
+  exclusion_radius: 2
+  sls_kwargs:
+    bce_weight: 0.50
+    iou_weight: 1.00
+    location_weight: 0.25
+    max_positive_weight: 50.0
+
+optimizer:
+  name: adamw
+  lr: 0.0002
+  backbone_lr_scale: 0.25
+  weight_decay: 0.0001
+
+training:
+  checkpoint_selection: fixed_last
+  epochs: 80
+  warmup_epochs: 0
+  min_lr: 0.000002
+  grad_clip: 5.0
+  amp: true
+  validation_interval: 0
+  initialize_from: null
+  resume: null

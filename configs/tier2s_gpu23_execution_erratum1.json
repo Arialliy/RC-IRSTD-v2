@@ -1,0 +1,57 @@
+{
+  "schema_version": "rc-irstd-aaai27-tier2s-gpu23-execution-erratum1",
+  "erratum_id": "tier2s_gpu23_execution_erratum1",
+  "research_mode": "exploratory_source_only",
+  "parent_protocol": {
+    "path": "configs/tier2s_factorized_causal_audit_v2_gpu23.json",
+    "sha256": "cf5630d1772965e5c326f30cf3b1023dd5e4458465238103c9801013bb80605c"
+  },
+  "parent_governance_amendment": {
+    "path": "artifacts/aaai27/audit/governance/tier2s_gpu23_amendment_v2/TIER2S_GPU23_GOVERNANCE_AMENDMENT.json",
+    "sha256": "0c53c54f3e4802bdf373af1e578e062e4106192aa64ba1a8b47ed7bb8595f136"
+  },
+  "parent_launcher": {
+    "path": "scripts/launch_tier2s_factorized_isolated_v2_gpu23.py",
+    "sha256": "f4da6156aaa7f8b5ffaea9d3e6e042e5a7faafd576eed6239b63eae49205cf6e"
+  },
+  "observed_post_registration_mismatches": {
+    "idle_probe": {
+      "problem": "strict_zero_mib_is_not_a_reachable_idle_state_on_this_host",
+      "evidence": "physical_gpu0_and_gpu1_had_no_compute_processes_and_zero_utilization_but_nvidia_smi_reported_1_mib",
+      "old_definition": "memory_used_mib_equals_0_and_no_compute_processes",
+      "corrected_definition": "memory_used_mib_at_most_4_on_each_selected_gpu_and_no_compute_processes",
+      "driver_bookkeeping_ceiling_mib": 4,
+      "utilization_is_recorded_but_not_a_standalone_busy_signal": true
+    },
+    "test_phase_transition": {
+      "problem": "pre_registration_only_assertion_becomes_false_after_successful_write_once_registration",
+      "frozen_test_nodeid": "tests/test_tier2s_gpu23_v2.py::test_amendment_verify_only_is_unregistered_and_never_authorizes_v3",
+      "resolution": "skip_only_that_exact_obsolete_pre_registration_assertion_after_exact_parent_registration_sha_is_present_and_add_post_registration_positive_tests",
+      "old_test_or_registration_mutated": false
+    }
+  },
+  "unchanged_scientific_and_hardware_contract": {
+    "physical_gpus": [2, 3],
+    "container_logical_ordinals": {"2": 0, "3": 1},
+    "container_must_expose_only_physical_gpus": [2, 3],
+    "gpu_fallback_allowed": false,
+    "two_fixed_independent_fifo_lanes": true,
+    "jobs_per_lane": 9,
+    "total_jobs": 18,
+    "source_only": true,
+    "result_use": "failure_attribution_only",
+    "formal_v3_model_training_authorized": false,
+    "source_gate_a_authorized": false,
+    "riskcurve_authorized": false,
+    "paper_claim_authorized": false,
+    "outer_target_access_authorized": false
+  },
+  "append_only_policy": {
+    "parent_protocol_mutated": false,
+    "parent_governance_amendment_mutated": false,
+    "parent_launcher_mutated": false,
+    "historical_tier2r_hold_mutated": false,
+    "old_gpu01_v1_execution_plan_mutated_or_executed": false,
+    "replacement_scope": "host_idle_predicate_and_post_registration_test_phase_only"
+  }
+}

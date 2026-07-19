@@ -1,0 +1,36 @@
+# Pre-specified calibrator used by the three-dataset outer-LODO protocol.
+# With only two meta-source domains per outer fold there is no third domain for
+# honest inner validation, so selection is fixed-last (never target-label based).
+seed: 42
+deterministic: true
+device: auto
+episodes_dir: ../outputs/meta_episodes
+output_dir: ../outputs/calibrator_outer_lodo
+
+validation:
+  strategy: fixed_last
+  domains: []
+
+model:
+  hidden_dims: [256, 128]
+  dropout: 0.10
+  min_logit: -10.0
+  max_logit: 18.0
+
+loss:
+  lambda_oracle: 1.0
+  lambda_violation: 1.0
+  lambda_utility: 0.05
+  lambda_smoothness: 0.01
+  under_weight: 4.0
+  soft_temperature: 0.20
+
+training:
+  epochs: 200
+  batch_size: 4
+  num_workers: 0
+  lr: 0.001
+  min_lr: 0.000001
+  weight_decay: 0.0001
+  grad_clip: 5.0
+  early_stopping_patience: 0

@@ -1,0 +1,59 @@
+# Strict source-only MSHNet + SLS baseline for target: NUAA-SIRST
+seed: 42
+deterministic: true
+device: auto
+output_dir: ../outputs/aaai27_detectors/nuaa/mshnet_sls
+
+data:
+  sources:
+    - {name: NUDT-SIRST, path: ../datasets/NUDT-SIRST}
+    - {name: IRSTD-1K, path: ../datasets/IRSTD-1K}
+
+  train_split: train
+  val_split: null
+  diagnostic_test_eval: false
+  image_size: 256
+  batch_per_domain: 2
+  num_workers: 4
+  augment: true
+
+model:
+  backend: canonical
+  input_channels: 3
+  channels: [16, 32, 64, 128, 256]
+  block_counts: [2, 2, 2, 2]
+
+loss:
+  lambda_tail: 0.0
+  lambda_miss: 0.0
+  lambda_margin: 0.0
+  auxiliary_weight: 0.25
+  background_fraction: 0.01
+  miss_fraction: 0.20
+  object_top_fraction: 0.25
+  gamma: 10.0
+  margin: 0.15
+  min_peak_score: 0.05
+  exclusion_radius: 2
+  sls_kwargs:
+    bce_weight: 0.50
+    iou_weight: 1.00
+    location_weight: 0.25
+    max_positive_weight: 50.0
+
+optimizer:
+  name: sgd
+  lr: 0.05
+  momentum: 0.9
+  weight_decay: 0.0001
+  nesterov: true
+
+training:
+  checkpoint_selection: fixed_last
+  epochs: 400
+  warmup_epochs: 5
+  min_lr: 0.000001
+  grad_clip: 5.0
+  amp: true
+  validation_interval: 0
+  resume: null

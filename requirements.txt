@@ -1,0 +1,14 @@
+# Install the PyTorch/torchvision build matching your CPU or CUDA platform
+# from https://pytorch.org/get-started/locally/ before installing this file.
+# These unpinned entries do not force a particular CUDA runtime and are no-ops
+# when a compatible build is already present.
+torch
+torchvision
+numpy
+scipy
+pillow
+scikit-image
+PyYAML
+pandas
+tqdm
+pytest

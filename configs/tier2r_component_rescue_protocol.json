@@ -1,0 +1,113 @@
+{
+  "schema_version": "rc-irstd-aaai27-tier2r-component-rescue-preregistered-protocol-v1",
+  "protocol_id": "tier2r_c_v1",
+  "candidate_frozen_name": "RC-MSHNet-CV-v1",
+  "source_only": true,
+  "historical_tier2_hold": {
+    "decision_path": "artifacts/aaai27/audit/phase3_source_lodo_gate/tier2_raw_logit_gate_v1/tier2_decision.json",
+    "decision_sha256": "1d122643d9c7a8d37a3edf510b9d3b346a2192e596f9e071c200fa5ce143a43a",
+    "authorization_path": "artifacts/aaai27/audit/phase3_source_lodo_gate/tier2_raw_logit_gate_v1/effective_authorization.json",
+    "authorization_sha256": "9eb9ebe2f9375f7ba9db56719d63e581a3a986b39427b6afb76dd55a2eef8219",
+    "required_decision": "TIER2_HOLD",
+    "required_tier3_authorized": false
+  },
+  "roles": {
+    "control": {
+      "paper_identity": "matched canonical MSHNet+SLS control",
+      "config": "configs/tier2r_control.yaml"
+    },
+    "c": {
+      "paper_identity": "RC-MSHNet-C contrast baseline",
+      "config": "configs/tier2r_rc_mshnet_c.yaml"
+    },
+    "cv": {
+      "paper_identity": "RC-MSHNet-CV-v1 component-context candidate",
+      "config": "configs/tier2r_rc_mshnet_cv_v1.yaml"
+    }
+  },
+  "seeds": [43, 44, 45],
+  "folds": {
+    "heldout_nudt": {
+      "training_source": "IRSTD-1K",
+      "training_root": "datasets/IRSTD-1K",
+      "held_out_source": "NUDT-SIRST",
+      "held_out_root": "datasets/NUDT-SIRST",
+      "initializer": "artifacts/aaai27/initializers/mshnet_seed42_train_irstd_tensor_only.pt"
+    },
+    "heldout_irstd": {
+      "training_source": "NUDT-SIRST",
+      "training_root": "datasets/NUDT-SIRST",
+      "held_out_source": "IRSTD-1K",
+      "held_out_root": "datasets/IRSTD-1K",
+      "initializer": "artifacts/aaai27/initializers/mshnet_seed42_train_nudt_tensor_only.pt"
+    }
+  },
+  "data_access": {
+    "allowed_source_roots": ["datasets/NUDT-SIRST", "datasets/IRSTD-1K"],
+    "forbidden_outer_target_root": "datasets/NUAA-SIRST",
+    "reject_parent_traversal": true,
+    "reject_symlink_components": true,
+    "outer_target_images_authorized": false,
+    "outer_target_labels_authorized": false,
+    "outer_target_images_used": false,
+    "outer_target_labels_used": false
+  },
+  "score_protocol": {
+    "primary_representation": "float32_raw_logit",
+    "prediction_rule": "float32_raw_logit >= shared_threshold_logit",
+    "exact_state_enumeration_is_primary": true,
+    "shared_threshold_across_source_domains": true,
+    "dense_grid_is_diagnostic_only": true,
+    "probability_threshold_sweep_allowed": false,
+    "inference_autocast_enabled": false,
+    "matching": {
+      "matching_rule": "overlap",
+      "centroid_distance": 3.0,
+      "connectivity": 2,
+      "min_component_area": 1
+    },
+    "budgets": [
+      {"name": "strict", "pixel": 0.000001, "component": 1.0},
+      {"name": "medium", "pixel": 0.000005, "component": 5.0},
+      {"name": "loose", "pixel": 0.00001, "component": 10.0}
+    ]
+  },
+  "decision_protocol": {
+    "sequential_gates": [
+      {"name": "contrast_vs_control", "candidate": "c", "baseline": "control"},
+      {"name": "component_context_vs_contrast", "candidate": "cv", "baseline": "c"}
+    ],
+    "paired_seed_aggregation": "arithmetic_mean_of_candidate_minus_baseline_per_seed",
+    "strict_macro_mean_min_delta": 0.005,
+    "strict_macro_positive_seed_consensus_min": 2,
+    "other_mean_min_delta": 0.0,
+    "worst_seed_min_delta": -0.005,
+    "numeric_atol": 1e-12,
+    "missing_or_infeasible_point": "TIER2R_HOLD",
+    "non_finite_metric": "TIER2R_HOLD",
+    "selection_table": {
+      "A_GO_B_GO": "select_cv_and_retain_component_claim",
+      "A_GO_B_HOLD": "select_c_and_drop_component_claim",
+      "A_HOLD": "overall_hold"
+    },
+    "all_nine_criteria_and_worst_seed_checks_must_pass": true
+  },
+  "training_protocol": {
+    "checkpoint_selection": "fixed_last",
+    "checkpoint_epoch_zero_based": 79,
+    "matched_initializer_within_seed_fold": true,
+    "matched_initial_extension_state_within_seed_fold": true,
+    "physical_gpus": [2, 3],
+    "physical_gpu_assignment": "preregistered_exact_per_job",
+    "schedule_order": "seed_local_interleaved_and_role_gpu_counterbalanced",
+    "wait_for_idle_gpu": false,
+    "allow_gpu_fallback": false,
+    "total_detector_jobs": 18
+  },
+  "authorization_protocol": {
+    "source_tier3_design_authorization_is_separate": true,
+    "outer_target_access_authorization_is_separate": true,
+    "outer_target_access_initially_authorized": false,
+    "tier2r_go_does_not_authorize_outer_target_access": true
+  }
+}

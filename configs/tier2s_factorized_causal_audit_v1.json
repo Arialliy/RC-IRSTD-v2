@@ -1,0 +1,174 @@
+{
+  "schema_version": "rc-irstd-aaai27-tier2s-factorized-causal-audit-protocol-v1",
+  "protocol_id": "tier2s_factorized_causal_audit_v1",
+  "research_mode": "exploratory_source_only",
+  "purpose": "separate_backbone_drift_residual_amplitude_and_cross_fold_score_scale_before_any_new_detector_training",
+  "scientific_limits": {
+    "paper_claim_authorized": false,
+    "source_tier3_authorized": false,
+    "outer_target_access_authorized": false,
+    "outer_target_images_used": false,
+    "outer_target_labels_used": false,
+    "may_recommend_formal_training_or_fresh_seed_run": false,
+    "result_use": "failure_attribution_only",
+    "scaling_alpha_tail_coordinate_or_calibration_may_be_claimed_as_innovation": false,
+    "may_authorize_v3_implementation": false
+  },
+  "governance_requirement": {
+    "required_before_tier2s_preregistration_export_and_evaluation": true,
+    "registration_path": "artifacts/aaai27/audit/governance/aaai27_model_success_contract_v1/GOVERNANCE_REGISTRATION.json",
+    "contract_path": "configs/aaai27_model_success_contract_v1.json",
+    "fresh_seed_ledger_path": "artifacts/aaai27/audit/governance/aaai27_model_success_contract_v1/FRESH_SEED_LEDGER.json",
+    "tier2s_source_only_diagnostic_authorized_must_be": true,
+    "formal_v3_model_training_authorized_must_be": false,
+    "source_gate_a_authorized_must_be": false,
+    "riskcurve_authorized_must_be": false,
+    "outer_target_access_authorized_must_be": false,
+    "all_registered_code_sha256_must_match": true
+  },
+  "immutable_parent_evidence": {
+    "tier2r_decision": {
+      "path": "artifacts/aaai27/audit/component_rescue/tier2r_c_v1_impl_erratum1/exact_gate/COMPONENT_RESCUE_DECISION.json",
+      "sha256": "a1c8193ebbf3d2b9cc9cf35f7921516fb2e8df44c9ff75596e5b4df50928be6b",
+      "required_decision": "TIER2R_HOLD",
+      "required_selected_candidate": null
+    },
+    "source_authorization": {
+      "path": "artifacts/aaai27/audit/component_rescue/tier2r_c_v1_impl_erratum1/exact_gate/SOURCE_TIER3_DESIGN_AUTHORIZATION.json",
+      "sha256": "8ab0d469d639fce6e6d2277d6915e3c1fdf91a801e1f693971425f1c5d57b828",
+      "required_authorized": false
+    },
+    "outer_target_authorization": {
+      "path": "artifacts/aaai27/audit/component_rescue/tier2r_c_v1_impl_erratum1/exact_gate/OUTER_TARGET_ACCESS_AUTHORIZATION.json",
+      "sha256": "e996e04b4d07d90de1a07ba4dd1554719b3a457ac8ea53be0a68c85c3bfc249e",
+      "required_authorized": false
+    }
+  },
+  "roles": ["control", "c"],
+  "seeds": [43, 44, 45],
+  "folds": {
+    "heldout_nudt": {
+      "training_source": "IRSTD-1K",
+      "training_root": "datasets/IRSTD-1K",
+      "held_out_source": "NUDT-SIRST",
+      "held_out_root": "datasets/NUDT-SIRST"
+    },
+    "heldout_irstd": {
+      "training_source": "NUDT-SIRST",
+      "training_root": "datasets/NUDT-SIRST",
+      "held_out_source": "IRSTD-1K",
+      "held_out_root": "datasets/IRSTD-1K"
+    }
+  },
+  "checkpoint_binding": {
+    "root": "outputs/aaai27/detectors/component_rescue/tier2r_c_v1",
+    "selection": "fixed_last_epoch_79",
+    "required_architecture_version": "rc-mshnet-v2-component-role-split",
+    "required_roles": {
+      "control": {
+        "use_contrast": false,
+        "use_component_context": false,
+        "use_component_expert": false,
+        "use_risk_gate": false
+      },
+      "c": {
+        "use_contrast": true,
+        "use_component_context": false,
+        "use_component_expert": false,
+        "use_risk_gate": true
+      }
+    }
+  },
+  "data_access": {
+    "allowed_source_roots": ["datasets/NUDT-SIRST", "datasets/IRSTD-1K"],
+    "forbidden_outer_target_root": "datasets/NUAA-SIRST",
+    "reject_parent_traversal": true,
+    "reject_symlink_components": true,
+    "official_split": "train"
+  },
+  "factorized_intervention": {
+    "base_capture": "fusion_head.forward_kwargs.base_logits",
+    "final_capture": "model_output.logits",
+    "residual_definition": "final_raw_logit_float32_minus_base_raw_logit_float32",
+    "alpha_candidates": [0.0, 0.25, 0.5, 0.75, 1.0],
+    "intervened_logit": "base_plus_alpha_times_residual",
+    "held_in_id_partition": {
+      "hash": "sha256(protocol_id + NUL + dataset_name + NUL + image_id)",
+      "modulus": 4,
+      "tail_fit_buckets": [0, 1],
+      "alpha_selection_bucket": 2,
+      "unused_audit_bucket": 3
+    },
+    "alpha_selection": {
+      "source_labels_only": true,
+      "held_out_labels_used": false,
+      "feasible_at_all_budgets": true,
+      "per_budget_pd_noninferiority_vs_alpha0": -0.005,
+      "objective": "maximize_arithmetic_mean_pd_across_strict_medium_loose",
+      "numeric_atol": 1e-12,
+      "tie_break": "smaller_alpha"
+    }
+  },
+  "source_tail_coordinate": {
+    "fit_pixels": "background_pixels_from_held_in_tail_fit_buckets_only",
+    "empirical_survival": "(count_calibration_background_logits_greater_equal_z + 1) / (num_calibration_background_pixels + 1)",
+    "tail_score": "negative_log10_empirical_survival",
+    "monotonicity": "nondecreasing_in_raw_logit",
+    "single_domain_ranking_changes": false,
+    "purpose": "align_coordinates_across_the_two_independently_trained_lodo_models",
+    "target_labels_used_for_fit": false
+  },
+  "score_protocol": {
+    "inference_dtype": "float32",
+    "inference_autocast_enabled": false,
+    "exact_state_enumeration_is_primary": true,
+    "dense_grid_is_diagnostic_only": true,
+    "shared_threshold_across_source_domains": true,
+    "matching": {
+      "matching_rule": "overlap",
+      "centroid_distance": 3.0,
+      "connectivity": 2,
+      "min_component_area": 1
+    },
+    "budgets": [
+      {"name": "strict", "pixel": 0.000001, "component": 1.0},
+      {"name": "medium", "pixel": 0.000005, "component": 5.0},
+      {"name": "loose", "pixel": 0.00001, "component": 10.0}
+    ]
+  },
+  "audit_branches": [
+    "raw_final",
+    "source_selected_alpha",
+    "source_tail_calibrated_final",
+    "source_tail_calibrated_selected_alpha"
+  ],
+  "comparison_protocol": {
+    "primary_pair": "c_minus_matched_control",
+    "reuse_tier2r_nine_criteria_without_relaxation": true,
+    "strict_macro_mean_min_delta": 0.005,
+    "strict_macro_positive_seed_consensus_min": 2,
+    "other_mean_min_delta": 0.0,
+    "worst_seed_min_delta": -0.005,
+    "numeric_atol": 1e-12,
+    "missing_infeasible_or_nonfinite": "AUDIT_HOLD",
+    "raw_final_must_reproduce_parent_hold": true,
+    "classification": {
+      "alpha_only_passes": "residual_amplitude_dominant",
+      "calibration_only_passes": "cross_fold_scale_dominant",
+      "combined_only_passes": "joint_residual_and_scale",
+      "none_passes": "contrast_route_unsupported",
+      "multiple_pass": "report_all_supported_factors_without_posthoc_selection"
+    }
+  },
+  "execution": {
+    "physical_gpus": [0, 1],
+    "logical_device": "cuda:0",
+    "scheduler": "two_fixed_independent_fifo_lanes",
+    "wait_for_idle_gpu": false,
+    "allow_gpu_fallback": false,
+    "max_concurrent_jobs_per_lane": 1,
+    "export_jobs": 18,
+    "job_set": "control_and_c_held_in_replay_plus_c_held_out_counterfactual_replay",
+    "fail_closed_on_identity_oom_nonfinite_or_missing": true
+  }
+}

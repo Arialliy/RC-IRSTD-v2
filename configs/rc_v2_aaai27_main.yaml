@@ -1,0 +1,134 @@
+# AAAI-27 frozen method/protocol contract for the raw-logit v4 pipeline.
+# Formal pipeline configs reference this file through `method_contract` and
+# must agree with its representation, grid, detector and target-stage fields.
+schema_version: rc-v2-aaai27-method-contract-v2-raw-logit
+seed: 42
+
+method:
+  name: risk_curve
+  role: proposed_method
+  model: risk_curve.monotone_curve_predictor.RiskCurvePredictor
+  output: outputs/aaai27/risk_curve_main/best.pt
+
+baseline:
+  name: direct_threshold
+  enabled: true
+  role: strong_baseline
+  display_name: RC-Direct
+  model: rc_irstd.models.calibrator.MonotoneBudgetCalibrator
+  output: outputs/aaai27/direct_threshold_baseline/best.pt
+  static_evaluator: rc_irstd.cli.evaluate_static_crossfit_direct
+
+detector:
+  baseline:
+    name: mshnet
+    backend: canonical
+    role: canonical_baseline_detector
+    epochs: 400
+  matched_control:
+    name: mshnet_ft
+    backend: rc_mshnet
+    use_contrast: false
+    use_component_context: false
+    use_risk_gate: false
+    expose_branch_auxiliary: false
+    role: matched_finetune_control
+  proposed:
+    name: rc_mshnet
+    backend: rc_mshnet
+    use_contrast: true
+    use_component_context: true
+    use_risk_gate: true
+    expose_branch_auxiliary: false
+    role: proposed_detector
+  checkpoint_policy: fixed_last
+
+representation:
+  name: raw_logit_float32
+  score_dtype: float32
+  inference_autocast: false
+  prediction_rule: raw_logits_greater_equal_threshold
+
+threshold_grid:
+  builder: risk_curve.build_logit_threshold_grid
+  source: source_official_train_only
+  finite_grid_points: 1024
+  max_grid_points: 2048
+  empty_action: external_plus_inf
+  require_outer_target_excluded: true
+  require_outer_final_detector: true
+  require_inner_pseudo_target_detectors: true
+
+risk_curve:
+  representation: raw_logit_float32
+  quantile: 0.90
+  lambda_component: 1.0
+  hidden_dim: 256
+  dropout: 0.10
+  output_heads:
+    - pixel_log_risk
+    - component_log_risk
+  component_supervision: monotone_upper_envelope
+  adaptation_window: 32
+  evaluation_window: 1
+  stride: 33
+  training:
+    train_file: outputs/curve_episodes/train.npz
+    val_file: outputs/curve_episodes/val.npz
+    output: outputs/aaai27/risk_curve_main/best.pt
+    epochs: 200
+    batch_size: 32
+    learning_rate: 0.001
+    weight_decay: 0.0001
+    patience: 30
+    num_workers: 0
+
+protocol:
+  # The datasets expose official train/test splits only.  This table is the
+  # standard detector comparison and evaluates every official test image.
+  standard_detection:
+    train_split: train
+    evaluation_split: test
+    evaluate_all_images: true
+
+  # Static image collections have no defensible temporal order.  Cross-fit
+  # evaluation covers each official test image once and makes no causal claim.
+  static_rc:
+    mode: cross_fit
+    evaluation_split: test
+    folds: 5
+    seed: 42
+    # Match the fixed-A predictor training semantics.  Each fold samples these
+    # support images without replacement from the four-fold complement, while
+    # every held-fold image remains a query exactly once.
+    adaptation_size: 32
+    adaptation_sampling: deterministic_without_replacement_from_complement
+    evaluate_all_images: true
+    causal_claim: false
+    formal_crc_eligible: false
+
+  target_stage_separation:
+    selection_scores: scores_unlabeled
+    selection_labels_loaded: false
+    selection_freeze_required: true
+    labeled_audit_scores: scores_labeled_audit
+    labeled_audit_after_freeze: true
+
+  # This is a separate sensitivity protocol, enabled only for datasets with
+  # trustworthy sequence_id/frame_index metadata.
+  temporal_rc:
+    mode: causal
+    enabled_when_sequence_metadata_available: true
+    support_size: 32
+    evaluation_size: 1
+    stride: 33
+    causal_claim: true
+
+crc:
+  role: optional_few_shot_extension
+  enabled: true
+  alpha: 0.10
+  calibration_sizes:
+    - 10
+    - 20
+    - 50

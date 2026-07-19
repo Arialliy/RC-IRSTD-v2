@@ -1,0 +1,579 @@
+{
+  "schema_version": "rc-irstd-aaai27-model-success-contract-v1",
+  "contract_id": "aaai27_model_success_contract_v1",
+  "contract_version": 1,
+  "lifecycle": {
+    "state": "reviewed_frozen_success_criteria",
+    "formal_training_authorized_by_this_file": false,
+    "registration_envelope_and_sha256_required": true,
+    "seed_freshness_ledger_must_be_frozen_at_registration": true,
+    "success_criteria_freeze_does_not_authorize_model_training": true,
+    "formal_model_training_requires_separate_versioned_v3_preregistration": true,
+    "threshold_changes_require_a_new_version_before_training": true
+  },
+  "success_semantics": {
+    "source_gate_go": "all_hard_and_all_applicable_conditional_hard_requirements_pass",
+    "aaai27_submission_performance_success": "source_gate_go_and_all_publication_targets_pass",
+    "stretch_required_for_submission_performance_success": false,
+    "performance_success_is_necessary_but_not_sufficient_for_submission_readiness": true,
+    "acceptance_guaranteed": false
+  },
+  "scope": {
+    "design_and_source_confirmation_domains": [
+      "NUDT-SIRST",
+      "IRSTD-1K"
+    ],
+    "forbidden_outer_domain_before_separate_authorization": "NUAA-SIRST",
+    "source_only": true,
+    "baseline_identity": "canonical_MSHNet_plus_StableSLS",
+    "primary_score_representation": "float32_raw_logit",
+    "primary_prediction_rule": "float32_raw_logit_greater_than_or_equal_to_registered_threshold",
+    "inference_autocast": false,
+    "historical_hold_policy": "append_only_never_overwrite_or_supersede_TIER2_or_TIER2R_HOLD",
+    "no_target_feedback_for_model_or_checkpoint_selection": true
+  },
+  "historical_evidence_anchor": {
+    "status": "frozen_failure_evidence_not_a_success_precedent",
+    "protocol_path": "configs/tier2r_component_rescue_protocol.json",
+    "protocol_sha256": "72e799849f3552c871156514e35e0af0458ed76b6b8b8186f3f3ea8a280c32ba",
+    "decision_path": "artifacts/aaai27/audit/component_rescue/tier2r_c_v1_impl_erratum1/exact_gate/COMPONENT_RESCUE_DECISION.json",
+    "decision_sha256": "a1c8193ebbf3d2b9cc9cf35f7921516fb2e8df44c9ff75596e5b4df50928be6b",
+    "decision": "TIER2R_HOLD",
+    "gate_a_pass_count": 6,
+    "gate_a_num_criteria": 9,
+    "gate_b_pass_count": 4,
+    "gate_b_num_criteria": 9,
+    "selected_candidate": null,
+    "component_claim_retained": false,
+    "source_tier3_design_authorized": false,
+    "outer_target_access_authorized": false,
+    "new_contract_may_not_overwrite_relabel_or_supersede_this_evidence": true
+  },
+  "historical_target_exposure": {
+    "registry_path": "artifacts/aaai27/audit/target_label_exposure_registry.json",
+    "registry_sha256": "2e7fd555c0277e1a3811e6dde0d293ea2d47b40ab588e6de3e3da20880e4b089",
+    "nuaa_official_test_labels_previously_viewed": true,
+    "nuaa_paper_role": "development_domain_not_untouched",
+    "untouched_claim_allowed": false,
+    "nudt_and_irstd_prior_test_label_exposure_requires_author_confirmation": true,
+    "future_access_freeze_semantics": "no_additional_NUAA_feedback_after_governance_freeze_not_never_seen",
+    "source_gate_go_alone_does_not_authorize_new_NUAA_access": true,
+    "strong_blind_generalization_claim_requires_a_new_unexposed_external_target": true
+  },
+  "novelty_boundary": {
+    "nearest_neighbor_literature_audit_required_before_formal_preregistration": true,
+    "core_mechanism_must_change_raw_score_ordering": true,
+    "posthoc_threshold_calibration_simple_scaling_loss_reweighting_or_routine_module_stacking_is_not_a_core_mechanism": true,
+    "mechanism_must_be_trainable_interpretable_and_falsifiable": true,
+    "performance_gate_alone_does_not_establish_novelty": true,
+    "literature_audit_reference": "artifacts/aaai27/research/literature-search-20260717-rc-irstd-novelty/papers.md"
+  },
+  "fresh5_confirmation": {
+    "rule_name": "fresh5",
+    "freshness_ledger_path": "artifacts/aaai27/audit/governance/aaai27_model_success_contract_v1/FRESH_SEED_LEDGER.json",
+    "formal_seeds_reserved_for_future_v3_gate_a_only": true,
+    "current_contract_model_scope": "one_unique_v3_core_mechanism_with_no_component_extension_arm",
+    "gate_b_applicable_under_current_contract": false,
+    "complete_gate_a_formal_arm_matrix_must_be_frozen_before_any_reserved_seed_is_consumed": true,
+    "future_component_extension_requires_new_contract_new_ledger_and_new_unseen_seeds": true,
+    "future_component_extension_may_not_reuse_46_47_48_49_50_after_any_gate_a_result_is_observed": true,
+    "local_repository_freshness_scan_must_be_frozen_at_governance_registration": true,
+    "external_or_deleted_artifact_freshness_requires_dated_author_attestation_before_v3_training": true,
+    "tier2s_reuses_only_frozen_seeds_43_44_45_without_training": true,
+    "formal_seed_ids": [
+      46,
+      47,
+      48,
+      49,
+      50
+    ],
+    "num_formal_seeds": 5,
+    "known_excluded_seed_ids": [
+      42,
+      43,
+      44,
+      45
+    ],
+    "exclude_every_seed_in_frozen_diagnostic_or_development_seed_ledger": true,
+    "registration_requires_proof_each_formal_seed_is_fresh": true,
+    "freshness_conflict_action": "fail_closed_and_issue_new_contract_version_before_training",
+    "single_seed_replacement_after_registration_allowed": false,
+    "seed_screening_or_selective_reporting_allowed": false,
+    "all_registered_seeds_must_be_run_and_reported": true,
+    "paired_within_seed_across_compared_arms": true,
+    "source_lodo_folds_per_seed": 2,
+    "required_fold_coverage": [
+      "heldout_NUDT-SIRST",
+      "heldout_IRSTD-1K"
+    ]
+  },
+  "false_alarm_budgets": [
+    {
+      "name": "strict",
+      "pixel_fa_per_pixel_max": 0.000001,
+      "component_fa_per_million_pixels_max": 1.0
+    },
+    {
+      "name": "medium",
+      "pixel_fa_per_pixel_max": 0.000005,
+      "component_fa_per_million_pixels_max": 5.0
+    },
+    {
+      "name": "loose",
+      "pixel_fa_per_pixel_max": 0.00001,
+      "component_fa_per_million_pixels_max": 10.0
+    }
+  ],
+  "statistics": {
+    "repeat_unit": "seed",
+    "num_independent_repeats": 5,
+    "paired_difference_direction": "candidate_minus_baseline_within_same_seed",
+    "domains_folds_and_images_are_not_independent_repeats": true,
+    "fold_aggregation_occurs_within_seed_before_between_seed_inference": true,
+    "inference_scope": "training_randomness_conditional_on_the_two_fixed_source_domains_and_frozen_splits",
+    "confidence_interval": {
+      "method": "two_sided_paired_student_t_interval_for_mean_seed_delta",
+      "confidence_level": 0.95,
+      "degrees_of_freedom": 4,
+      "t_critical": 2.7764451051977987,
+      "formula": "mean_delta_plus_or_minus_t_critical_times_sample_sd_of_seed_deltas_div_sqrt_5",
+      "zero_variance_rule": "lower_and_upper_equal_mean_delta",
+      "non_finite_or_missing_input": "fail_closed"
+    },
+    "no_domain_image_component_or_threshold_pseudoreplication": true,
+    "every_primary_effect_must_report_all_five_seed_deltas_mean_sample_sd_and_95pct_ci": true,
+    "all_hard_metrics_form_an_intersection_union_decision_no_metric_cherry_picking": true,
+    "individual_seed_results_may_not_be_suppressed": true
+  },
+  "protocol_invariants": {
+    "required_before_formal_training": [
+      "registered_contract_path_and_sha256",
+      "fresh_seed_ledger_path_and_sha256",
+      "source_split_manifests_and_sha256",
+      "model_code_and_config_sha256",
+      "canonical_baseline_code_config_and_initializer_sha256",
+      "training_hyperparameters",
+      "fixed_checkpoint_selection_rule",
+      "raw_logit_export_and_exact_state_evaluator_sha256",
+      "matching_protocol",
+      "deployable_action_selector_and_tie_break",
+      "canonical_segmentation_action",
+      "all_metric_definitions",
+      "complete_source_experiment_matrix"
+    ],
+    "checkpoint_selection": "fixed_before_training_and_identical_across_compared_arms",
+    "missing_job_checkpoint_metric_or_artifact": "fail_closed",
+    "posthoc_threshold_gate_seed_or_metric_changes_allowed": false,
+    "historical_hold_mutation_allowed": false,
+    "raw_logit_exact_state_evaluation_is_primary": true,
+    "dense_grid_is_diagnostic_only": true
+  },
+  "data_and_metric_integrity": {
+    "source_split_manifests_and_ordered_id_sha256_must_be_frozen": true,
+    "perceptual_near_duplicate_and_sequence_scene_group_audit_required_before_v3_training": true,
+    "cross_fit_partition_unit": "frozen_near_duplicate_or_sequence_scene_group_not_individual_image_when_a_group_is_known",
+    "group_leakage_across_fit_selection_and_evaluation_partitions_allowed": false,
+    "bootstrap_or_uncertainty_resampling_unit": "seed_primary_and_frozen_group_for_secondary_image_level_analysis",
+    "primary_object_matching_rule": "one_to_one_any_overlap",
+    "required_matching_sensitivity": "one_to_one_centroid_distance_at_most_3_pixels",
+    "component_connectivity": 2,
+    "formal_min_component_area": 1,
+    "component_area_filter_may_not_change_pixel_false_alarm_counts": true,
+    "mIoU_definition": "dataset_global_binary_intersection_over_union_over_all_evaluation_images",
+    "nIoU_definition": "arithmetic_mean_of_per_image_binary_intersection_over_union",
+    "metric_aggregation_and_denominators_must_be_written_in_the_paper": true
+  },
+  "tiers": {
+    "hard": {
+      "required_for_source_gate_go": true,
+      "fresh5_nine_criterion_gate_template": {
+        "heritage": "preserves_the_frozen_nine_metric_axes_and_delta_floors_but_replaces_three_seed_confirmation_with_new_fresh5_confirmation",
+        "normative_status": "newly_preregistered_fresh5_gate_not_a_historical_result",
+        "paired_seed_aggregation": "arithmetic_mean_of_candidate_minus_baseline_per_seed",
+        "required_pass_count": 9,
+        "num_criteria": 9,
+        "criteria": [
+          {
+            "id": "strict_macro_pd",
+            "budget": "strict",
+            "metric": "macro_pd",
+            "operating_point_view": "frozen_gate_source_pooled",
+            "paired_mean_delta_min": 0.005
+          },
+          {
+            "id": "strict_domain_pd_nudt",
+            "budget": "strict",
+            "metric": "domain_pd",
+            "domain": "NUDT-SIRST",
+            "operating_point_view": "frozen_gate_source_pooled",
+            "paired_mean_delta_min": 0.0
+          },
+          {
+            "id": "strict_domain_pd_irstd1k",
+            "budget": "strict",
+            "metric": "domain_pd",
+            "domain": "IRSTD-1K",
+            "operating_point_view": "frozen_gate_source_pooled",
+            "paired_mean_delta_min": 0.0
+          },
+          {
+            "id": "pooled_pd_strict",
+            "budget": "strict",
+            "metric": "pooled_pd",
+            "operating_point_view": "frozen_gate_source_pooled",
+            "paired_mean_delta_min": 0.0
+          },
+          {
+            "id": "pooled_pd_medium",
+            "budget": "medium",
+            "metric": "pooled_pd",
+            "operating_point_view": "frozen_gate_source_pooled",
+            "paired_mean_delta_min": 0.0
+          },
+          {
+            "id": "pooled_pd_loose",
+            "budget": "loose",
+            "metric": "pooled_pd",
+            "operating_point_view": "frozen_gate_source_pooled",
+            "paired_mean_delta_min": 0.0
+          },
+          {
+            "id": "worst_domain_pd_strict",
+            "budget": "strict",
+            "metric": "worst_domain_pd",
+            "operating_point_view": "frozen_gate_source_worst",
+            "paired_mean_delta_min": 0.0
+          },
+          {
+            "id": "worst_domain_pd_medium",
+            "budget": "medium",
+            "metric": "worst_domain_pd",
+            "operating_point_view": "frozen_gate_source_worst",
+            "paired_mean_delta_min": 0.0
+          },
+          {
+            "id": "worst_domain_pd_loose",
+            "budget": "loose",
+            "metric": "worst_domain_pd",
+            "operating_point_view": "frozen_gate_source_worst",
+            "paired_mean_delta_min": 0.0
+          }
+        ],
+        "numeric_atol": 1e-12,
+        "seed_delta_definition": "one_candidate_minus_baseline_delta_per_registered_seed_after_the_criterion_specific_two_fold_source_reduction_no_image_domain_or_threshold_pseudoreplication",
+        "paired_mean_delta_definition": "arithmetic_mean_of_exactly_five_finite_registered_seed_deltas",
+        "mean_pass_operator": "paired_mean_delta_greater_than_or_equal_to_criterion_floor_minus_numeric_atol",
+        "worst_seed_pass_operator": "minimum_of_the_five_seed_deltas_greater_than_or_equal_to_every_criterion_worst_seed_delta_min_minus_numeric_atol",
+        "consensus_applicability": "strict_macro_pd_only",
+        "strict_macro_consensus_pass_operator": "count_of_seed_deltas_strictly_greater_than_numeric_atol_greater_than_or_equal_to_strict_macro_positive_seed_min",
+        "non_strict_macro_consensus_pass_value": true,
+        "criterion_pass_formula": "mean_pass_and_worst_seed_pass_and_applicable_consensus_pass",
+        "gate_pass_formula": "all_nine_criterion_pass_values_true",
+        "missing_fold_seed_arm_metric_or_non_finite_reduction": "HOLD_without_partial_aggregation",
+        "every_criterion_worst_seed_delta_min": -0.005,
+        "strict_macro_positive_seed_min": 4,
+        "strict_macro_positive_consensus_status": "new_fresh5_ceil_two_thirds_rule_4_of_5",
+        "strict_macro_positive_definition": "paired_seed_delta_strictly_greater_than_numeric_atol",
+        "missing_infeasible_or_non_finite": "HOLD"
+      },
+      "gate_a": {
+        "name": "core_mechanism_vs_canonical_baseline",
+        "candidate": "new_core_model",
+        "baseline": "canonical_MSHNet_plus_StableSLS",
+        "required": true,
+        "template": "fresh5_nine_criterion_gate_template",
+        "required_result": "9_of_9_GO",
+        "evaluated_on_core_model_float32_raw_logits_before_riskcurve": true,
+        "riskcurve_calibration_or_system_gain_may_compensate_gate_a_failure": false
+      },
+      "gate_b": {
+        "name": "component_extension_vs_gate_a_core_model",
+        "candidate": "component_extended_model",
+        "baseline": "gate_a_core_model",
+        "conditional_hard": true,
+        "applicable_if": "false_under_contract_v1_unique_core_scope",
+        "current_contract_applicable": false,
+        "current_contract_component_extension_arm_allowed": false,
+        "activation_requires": "new_versioned_contract_and_fresh_seed_ledger_frozen_before_any_component_extension_training",
+        "seeds_46_47_48_49_50_may_be_used_for_gate_b": false,
+        "future_gate_b_must_use_new_unseen_seeds_if_any_gate_a_result_has_been_observed": true,
+        "template": "fresh5_nine_criterion_gate_template",
+        "required_result_when_applicable": "9_of_9_GO",
+        "failure_action": "select_gate_a_core_model_and_delete_component_contribution_claims"
+      },
+      "legacy_gate_limit": {
+        "source_pooled_and_source_worst_may_select_different_thresholds": true,
+        "nine_criterion_gate_is_necessary_but_not_sufficient": true,
+        "legacy_views_cannot_satisfy_the_single_deployable_action_guard": true,
+        "source_worst_uses_heldout_labels_to_maximize_worst_domain_pd": true,
+        "source_worst_is_a_labelled_audit_oracle_not_a_deployable_selector": true
+      },
+      "single_deployable_action_guard": {
+        "normative_status": "newly_preregistered_hard_guard_not_a_historical_gate_result",
+        "selector_view": "registered_training_source_only_shared_lodo_bundle_selector",
+        "selector_must_be_fully_specified_and_hash_frozen_before_training": true,
+        "selector_inputs": "only_registered_training_side_source_partitions_or_registered_label_free_statistics_never_heldout_evaluation_labels",
+        "selector_objective_and_tie_break_must_be_frozen_before_training": true,
+        "action_unit": "one_two_fold_checkpoint_bundle_plus_one_shared_score_transform_threshold_or_policy_per_arm_seed_budget",
+        "two_fold_checkpoint_bundle": {
+          "heldout_NUDT-SIRST_member": "checkpoint_trained_only_on_IRSTD-1K",
+          "heldout_IRSTD-1K_member": "checkpoint_trained_only_on_NUDT-SIRST"
+        },
+        "one_bundle_action_per_model_seed_and_budget": true,
+        "one_shared_threshold_or_policy_across_the_two_fold_members": true,
+        "bundle_dispatches_only_the_preregistered_fold_member_for_each_domain": true,
+        "same_non_checkpoint_action_fields_applied_unchanged_to_both_source_domains": true,
+        "domain_identity_or_heldout_labels_may_not_select_or_modify_action": true,
+        "action_includes": [
+          "two_fold_checkpoint_bundle",
+          "score_transform",
+          "threshold_or_policy",
+          "reject_rule"
+        ],
+        "all_deployable_guards_and_system_metrics_must_be_computed_from_this_action": true,
+        "each_domain_must_simultaneously_satisfy_pixel_and_component_fa_budget": true,
+        "domain_row_must_bind_bundle_action_sha256_and_dispatched_member_id": true,
+        "pixel_and_component_fa_must_come_from_the_same_prediction_mask_and_raw_count_row": true,
+        "required_raw_count_fields": [
+          "fp_pixels",
+          "fp_components",
+          "total_valid_pixels"
+        ],
+        "exact_budget_checks": {
+          "pixel": "fp_pixels_div_total_valid_pixels_less_than_or_equal_to_pixel_budget",
+          "component": "fp_components_div_total_valid_pixels_times_1000000_less_than_or_equal_to_component_budget",
+          "arithmetic": "integer_cross_multiplication_before_display_rounding",
+          "domain_reduction": "all_source_domains_must_pass_both_checks"
+        },
+        "budget_names": [
+          "strict",
+          "medium",
+          "loose"
+        ],
+        "domain_names": [
+          "NUDT-SIRST",
+          "IRSTD-1K"
+        ],
+        "pooled_budget_feasibility_is_not_a_substitute": true
+      },
+      "deployable_action_per_domain_pd_guards": {
+        "normative_status": "newly_preregistered_guard",
+        "aggregation": "paired_seed_mean_delta",
+        "every_guard_worst_seed_delta_min": -0.005,
+        "guards": [
+          {
+            "budget": "strict",
+            "domain": "NUDT-SIRST",
+            "pd_delta_min": 0.0,
+            "status": "strict_guard_redeclared_for_single_action"
+          },
+          {
+            "budget": "strict",
+            "domain": "IRSTD-1K",
+            "pd_delta_min": 0.0,
+            "status": "strict_guard_redeclared_for_single_action"
+          },
+          {
+            "budget": "medium",
+            "domain": "NUDT-SIRST",
+            "pd_delta_min": 0.0,
+            "status": "new_guard"
+          },
+          {
+            "budget": "medium",
+            "domain": "IRSTD-1K",
+            "pd_delta_min": 0.0,
+            "status": "new_guard"
+          },
+          {
+            "budget": "loose",
+            "domain": "NUDT-SIRST",
+            "pd_delta_min": 0.0,
+            "status": "new_guard"
+          },
+          {
+            "budget": "loose",
+            "domain": "IRSTD-1K",
+            "pd_delta_min": 0.0,
+            "status": "new_guard"
+          }
+        ]
+      },
+      "finite_nonreject_tp_requirements": {
+        "all_primary_metrics_and_all_active_thresholds_must_be_finite": true,
+        "fixed_global_threshold_mode_requires_finite_threshold_and_all_reject_sentinel_false": true,
+        "fixed_global_threshold_mode_coverage_required": 1.0,
+        "adaptive_policy_mode_may_reject_individual_images": true,
+        "adaptive_policy_active_thresholds_must_be_finite": true,
+        "adaptive_policy_coverage_uses_the_risk_and_coverage_floor": true,
+        "selected_bundle_action_must_not_be_reject_all": true,
+        "every_seed_domain_budget_cell_must_have_tp_objects_greater_than": 0,
+        "gt_denominator_must_include_rejected_images": true,
+        "missing_or_zero_gt_denominator": "fail_closed",
+        "reject_semantics": "empty_prediction_with_zero_tp_zero_fp_pixels_zero_fp_components",
+        "rejects_may_not_be_removed_from_all_action_metrics": true
+      },
+      "risk_and_coverage_floor": {
+        "normative_status": "newly_preregistered_judgment_floor_not_a_historical_result",
+        "evaluation_scope": "same_single_deployable_action_all_action_view",
+        "required_for_each_budget": true,
+        "paper_display_name": "JointBSR-upper",
+        "bound_metric_field": "joint_budget_satisfaction_rate_per_image_suffix_max_including_rejects_as_no_detection",
+        "bound_metric_definition": "mean_over_all_images_of_pixel_risk_less_than_or_equal_to_budget_and_per_image_component_suffix_max_risk_less_than_or_equal_to_budget",
+        "component_envelope": "per_image_suffix_max_conservative_majorant_of_raw_component_risk",
+        "component_risk_unit": "false_positive_components_per_million_pixels_of_that_image",
+        "pixel_risk_unit": "false_positive_pixels_per_valid_pixel_of_that_image",
+        "budget_boundary_operator": "less_than_or_equal",
+        "denominator": "all_images_including_rejects_as_empty_predictions",
+        "interpretation": "conservative_joint_budget_satisfaction_rate_that_implies_raw_component_budget_control_not_an_upper_bound_on_satisfaction",
+        "joint_budget_satisfaction_rate_suffix_max_min_over_source_domains": 0.9,
+        "coverage_min_over_source_domains": 0.9,
+        "seed_domain_budget_reduction": "both_floors_must_pass_in_every_registered_seed_source_domain_budget_cell",
+        "averaging_across_a_failed_seed_domain_or_budget_cell_allowed": false,
+        "missing_rejected_or_non_finite_cell": "HOLD",
+        "active_only_metrics_must_also_be_reported_but_cannot_replace_all_action_metrics": true
+      },
+      "segmentation_noncollapse": {
+        "normative_status": "newly_preregistered_judgment_floor_not_a_historical_result",
+        "evaluation_scope": "all_action_under_canonical_raw_logit_segmentation_action",
+        "canonical_raw_logit_threshold": 0.0,
+        "prediction_rule": "float32_raw_logit_greater_than_or_equal_to_0.0",
+        "same_action_for_candidate_and_baseline": true,
+        "metrics": [
+          "mIoU",
+          "nIoU"
+        ],
+        "source_macro_paired_mean_delta_min": -0.005,
+        "each_source_domain_paired_mean_delta_min": -0.01,
+        "rejected_images_are_empty_predictions_and_remain_in_denominators": true
+      }
+    },
+    "publication_target": {
+      "normative_status": "newly_preregistered_judgment_targets_not_historical_evidence",
+      "hard_source_gate_status": "unchanged_not_a_hard_authorization_gate",
+      "required_for_aaai27_submission_performance_success": true,
+      "comparison": "final_selected_model_minus_canonical_MSHNet_plus_StableSLS",
+      "point_estimate_targets": {
+        "same_deployable_action_source_macro_pd_delta": {
+          "strict": 0.02,
+          "medium": 0.01,
+          "loose": 0.01
+        },
+        "canonical_segmentation_source_macro_delta": {
+          "mIoU": 0.01,
+          "nIoU": 0.01
+        },
+        "end_to_end_latency_ratio_candidate_over_baseline_max": 1.25
+      },
+      "primary_effect_metrics_requiring_ci_lower_strictly_greater_than_zero": [
+        "source_macro_pd_delta_strict",
+        "source_macro_pd_delta_medium",
+        "source_macro_pd_delta_loose",
+        "source_macro_mIoU_delta",
+        "source_macro_nIoU_delta"
+      ],
+      "ci_rule_ref": "statistics.confidence_interval",
+      "effect_seed_reduction": "compute_two_domain_source_macro_within_each_seed_then_apply_the_registered_five_seed_mean_and_paired_t_interval",
+      "domain_macro_reduction": "unweighted_arithmetic_mean_of_NUDT-SIRST_and_IRSTD-1K_within_seed",
+      "latency_gate_statistic": "median_end_to_end_latency_ratio_candidate_over_baseline",
+      "latency_p95_role": "required_reported_sensitivity_not_the_1.25_ratio_gate_statistic",
+      "latency_measurement": {
+        "same_hardware_software_precision_input_size_batch_size_and_timing_harness": true,
+        "includes_all_deployable_model_and_policy_compute": true,
+        "reports_warmup_iterations_timed_iterations_median_and_p95": true,
+        "excludes_offline_training_and_audit_only_label_oracle": true
+      },
+      "all_point_targets_and_all_primary_ci_targets_must_pass": true
+    },
+    "stretch": {
+      "normative_status": "newly_preregistered_optional_stretch_targets_not_historical_evidence",
+      "required_for_aaai27_submission_performance_success": false,
+      "same_deployable_action_worst_source_domain_pd_min": {
+        "strict": 0.1,
+        "medium": 0.25,
+        "loose": 0.4
+      },
+      "primary_effect_ci_lower_must_reach_point_effect_target": {
+        "source_macro_pd_delta_strict": 0.02,
+        "source_macro_pd_delta_medium": 0.01,
+        "source_macro_pd_delta_loose": 0.01,
+        "source_macro_mIoU_delta": 0.01,
+        "source_macro_nIoU_delta": 0.01
+      },
+      "end_to_end_latency_ratio_candidate_over_baseline_max": 1.1,
+      "joint_budget_satisfaction_rate_suffix_max_min_over_source_domains": 0.95,
+      "coverage_min_over_source_domains": 0.95
+    }
+  },
+  "diagnostic_only_evidence": {
+    "exact_per_domain_label_oracle": {
+      "allowed": true,
+      "purpose": "frontier_and_raw_ranking_diagnostic_only",
+      "run_only_after_model_checkpoint_and_deployable_action_are_frozen": true,
+      "may_select_model_checkpoint_seed_threshold_or_deployable_action": false,
+      "may_count_toward_hard_or_publication_target": false,
+      "must_be_reported_separately_from_deployable_action": true,
+      "required_as_frozen_post_training_falsification_if_raw_ordering_or_mechanism_claim_is_retained": true,
+      "falsification_direction_must_be_preregistered_before_training": true,
+      "minimum_claim_retention_rule": "positive_preregistered_oracle_or_ranking_delta_in_each_source_domain",
+      "failure_action": "mechanism_claim_fails_without_retuning_or_reselecting_the_model"
+    },
+    "dense_threshold_grid": {
+      "allowed": true,
+      "purpose": "exact_state_implementation_diagnostic_only",
+      "may_count_toward_primary_decision": false
+    }
+  },
+  "outer_target_sealed_batch": {
+    "outer_domain": "NUAA-SIRST",
+    "historical_official_test_label_exposure": true,
+    "paper_role": "precommitted_no_feedback_development_domain_evaluation_not_untouched_blind_test",
+    "future_authorization_controls_only_additional_access_and_does_not_reset_history": true,
+    "access_before_separate_source_gate_authorization": false,
+    "source_gate_go_alone_authorizes_access": false,
+    "authorization_derivation": "source_gate_go_and_complete_pre_access_batch_seal_and_independent_outer_access_authorization_artifact",
+    "independent_outer_access_authorization_path_and_sha256_required": true,
+    "before_first_access_must_freeze": [
+      "model_code_and_training_hyperparameters",
+      "threshold_and_reject_protocol",
+      "checkpoint_selection_rule",
+      "candidate_set",
+      "all_model_seed_metric_baseline_ablation_robustness_efficiency_tasks",
+      "one_shot_outer_domain_evaluation_plan",
+      "three_domain_confirmatory_experiment_plan",
+      "complete_sealed_batch_manifest_and_sha256"
+    ],
+    "all_NUAA_models_seeds_metrics_and_comparisons_in_one_complete_batch": true,
+    "post_freeze_batch_id_required": true,
+    "historical_access_does_not_start_or_satisfy_a_future_post_freeze_batch": true,
+    "batch_start_definition": "first_additional_NUAA_read_or_execution_under_the_registered_post_freeze_batch_id_after_complete_batch_seal_and_independent_authorization",
+    "batch_may_start_without_complete_seal_and_independent_authorization": false,
+    "future_batch_semantics_do_not_reset_or_erase_historical_exposure": true,
+    "add_or_remove_tasks_after_batch_start_allowed": false,
+    "target_result_feedback_to_model_checkpoint_threshold_or_claim_selection_allowed": false,
+    "one_shot_outer_evaluation_and_three_domain_confirmation_must_be_distinguished": true,
+    "confirmation_results_do_not_participate_in_model_selection": true,
+    "all_preregistered_results_including_failures_must_be_reported": true
+  },
+  "fail_closed_conditions": [
+    "contract_or_preregistration_not_frozen_before_training",
+    "fresh_seed_ledger_or_registered_code_sha256_not_frozen_before_formal_v3_training",
+    "fresh_seed_local_scan_not_frozen_or_any_consumption_like_hit_unresolved",
+    "fresh_seed_external_deleted_or_off_repository_author_attestation_missing_before_v3_training",
+    "fresh5_seed_conflict_or_incomplete_seed_fold_matrix",
+    "missing_infeasible_non_finite_or_reject_all_primary_action",
+    "posthoc_seed_checkpoint_action_metric_or_threshold_selection",
+    "any_failed_hard_or_applicable_conditional_hard_requirement",
+    "component_claim_retained_after_gate_b_failure",
+    "pooled_only_false_alarm_compliance_without_per_domain_dual_budget_compliance",
+    "label_oracle_or_dense_grid_used_for_primary_selection",
+    "riskcurve_calibration_or_system_metrics_used_to_compensate_gate_a_failure",
+    "known_near_duplicate_or_sequence_scene_group_split_across_fit_and_evaluation",
+    "heldout_source_labels_used_to_select_the_deployable_action",
+    "retained_mechanism_claim_after_failed_frozen_oracle_or_ranking_falsification",
+    "source_go_treated_as_outer_access_without_complete_seal_and_independent_authorization",
+    "unsealed_or_premature_outer_target_access",
+    "historical_hold_mutation_or_suppression_of_failed_results",
+    "NUAA_described_as_untouched_despite_frozen_historical_exposure_registry"
+  ]
+}

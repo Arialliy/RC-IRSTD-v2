@@ -1,0 +1,62 @@
+# Strict three-domain LODO using the repository-local frozen datasets. Add a
+# genuinely unseen target under final_targets only when one is available.
+seed: 42
+# LODO folds are isolated processes and assigned one-to-one to GPU 0/1/2.
+device: cuda:0
+devices: [cuda:0, cuda:1, cuda:2]
+parallel_lodo: true
+output_dir: ../outputs/full_pipeline
+
+method:
+  name: risk_curve
+baseline:
+  direct_threshold:
+    # Trained from source-train pseudo episodes and evaluated in its own
+    # full-coverage static cross-fit artifact tree.
+    enabled: true
+
+detector_template: detector.yaml
+calibrator_template: calibrator.yaml
+
+meta_sources:
+  - name: NUAA-SIRST
+    path: ../datasets/NUAA-SIRST
+  - name: NUDT-SIRST
+    path: ../datasets/NUDT-SIRST
+  - name: IRSTD-1K
+    path: ../datasets/IRSTD-1K
+
+# Do not reuse a meta-source as a final target in a formal experiment.
+final_targets: []
+
+meta:
+  # Meta labels come exclusively from official source train. Source test is
+  # reserved for outer evaluation and is rejected by the runner here.
+  split: train
+  budgets: [0.0001, 0.00001, 0.000001]
+  adaptation_window: 32
+  evaluation_window: 1
+  stride: 33
+  mode: causal
+  risk_bins: 256
+
+risk_curve:
+  quantile: 0.90
+  lambda_component: 1.0
+  hidden_dim: 256
+  dropout: 0.10
+  epochs: 200
+  batch_size: 32
+  lr: 0.001
+  weight_decay: 0.0001
+  patience: 30
+  num_workers: 0
+  validation_domain: IRSTD-1K
+  budget_pairs:
+    - {name: loose, pixel: 0.00001, component: 5.0}
+    - {name: strict, pixel: 0.000001, component: 1.0}
+
+crc:
+  enabled: true
+  alpha: 0.10
+  calibration_sizes: [10, 20, 50]
